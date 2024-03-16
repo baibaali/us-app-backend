@@ -1,7 +1,7 @@
 package com.baibaali.usapp.authentication.service
 
-import com.baibaali.usapp.authentication.model.toUserDetails
-import com.baibaali.usapp.authentication.repository.UserRepository
+import com.baibaali.usapp.user.model.toUserDetails
+import com.baibaali.usapp.user.repository.UserRepository
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.security.core.userdetails.UserDetailsService
 import org.springframework.security.core.userdetails.UsernameNotFoundException

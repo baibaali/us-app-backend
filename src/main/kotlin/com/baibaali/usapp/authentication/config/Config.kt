@@ -1,6 +1,6 @@
 package com.baibaali.usapp.authentication.config
 
-import com.baibaali.usapp.authentication.repository.UserRepository
+import com.baibaali.usapp.user.repository.UserRepository
 import com.baibaali.usapp.authentication.service.UserDetailsServiceImpl
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration

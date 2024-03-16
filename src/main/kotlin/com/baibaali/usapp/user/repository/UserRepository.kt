@@ -1,6 +1,6 @@
-package com.baibaali.usapp.authentication.repository
+package com.baibaali.usapp.user.repository
 
-import com.baibaali.usapp.authentication.model.User
+import com.baibaali.usapp.user.model.User
 import org.springframework.data.jpa.repository.JpaRepository
 import org.springframework.stereotype.Repository
 

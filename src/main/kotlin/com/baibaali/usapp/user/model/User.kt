@@ -1,4 +1,4 @@
-package com.baibaali.usapp.authentication.model
+package com.baibaali.usapp.user.model
 
 import jakarta.persistence.*
 import org.springframework.security.core.userdetails.UserDetails

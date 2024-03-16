@@ -1,7 +1,7 @@
-package com.baibaali.usapp.authentication.service
+package com.baibaali.usapp.user.service
 
-import com.baibaali.usapp.authentication.model.User
-import com.baibaali.usapp.authentication.repository.UserRepository
+import com.baibaali.usapp.user.model.User
+import com.baibaali.usapp.user.repository.UserRepository
 import org.springframework.stereotype.Service
 
 @Service

@@ -8,20 +8,20 @@ import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/auth")
 class AuthController {
 
-    @PostMapping("/auth/register")
+    @PostMapping("/register")
     fun register(@RequestBody request: UserRegistrationRequest): ResponseEntity<AuthResponse> {
         throw NotImplementedError()
     }
 
-    @PostMapping("/auth/login")
+    @PostMapping("/login")
     fun authenticate(@RequestBody request: AuthRequest): ResponseEntity<AuthResponse> {
         throw NotImplementedError()
     }
 
-    @PostMapping("/auth/refresh-token")
+    @PostMapping("/refresh-token")
     fun refreshAccessToken(@RequestBody request: RefreshTokenRequest): ResponseEntity<RefreshTokenResponse> {
         throw NotImplementedError()
     }

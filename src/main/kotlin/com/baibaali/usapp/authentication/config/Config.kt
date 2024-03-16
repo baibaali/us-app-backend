@@ -1,7 +1,9 @@
 package com.baibaali.usapp.authentication.config
 
+import com.baibaali.usapp.authentication.service.JwtProperties
 import com.baibaali.usapp.user.repository.UserRepository
 import com.baibaali.usapp.authentication.service.UserDetailsServiceImpl
+import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.security.authentication.AuthenticationManager
@@ -12,6 +14,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
 import org.springframework.security.crypto.password.PasswordEncoder
 
 @Configuration
+@EnableConfigurationProperties(JwtProperties::class)
 class Config {
 
     @Bean

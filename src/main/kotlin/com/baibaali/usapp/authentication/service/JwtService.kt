@@ -16,7 +16,7 @@ class JwtService(
         jwtProperties.key.toByteArray()
     )
 
-    private fun generate(userDetails: UserDetails, expiration: Date, claims: Map<String, Any> = emptyMap()): String {
+    fun generate(userDetails: UserDetails, expiration: Date, claims: Map<String, Any> = emptyMap()): String {
         return Jwts.builder()
             .claims()
             .subject(userDetails.username)
@@ -44,6 +44,10 @@ class JwtService(
 
     fun extractExpiration(jwt: String): Date {
         return extractClaim(jwt, Claims::getExpiration)
+    }
+
+    fun extractType(jwt: String): String? {
+        return extractClaim(jwt) { claims -> claims["type"] as String? }
     }
 
     private fun <T> extractClaim(jwt: String, claimsResolver: (Claims) -> T): T {

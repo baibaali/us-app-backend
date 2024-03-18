@@ -29,8 +29,9 @@ class JwtAuthFilter(
 
         val jwt = authHeader.substringAfter("Bearer ")
         val email = jwtService.extractEmail(jwt)
+        val type = jwtService.extractType(jwt)
 
-        if (email != null && SecurityContextHolder.getContext().authentication == null) {
+        if (email != null && type == "access" && SecurityContextHolder.getContext().authentication == null) {
             val userDetails = userDetailsService.loadUserByUsername(email)
 
             if (jwtService.isTokenValid(jwt, userDetails)) {
@@ -39,6 +40,11 @@ class JwtAuthFilter(
 
                 SecurityContextHolder.getContext().authentication = authToken
             }
+        } else {
+            response.status = HttpServletResponse.SC_UNAUTHORIZED
+            response.writer.write("Invalid token")
+            response.writer.flush()
+            return
         }
 
         filterChain.doFilter(request, response)

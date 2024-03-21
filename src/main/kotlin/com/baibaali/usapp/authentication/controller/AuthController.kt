@@ -50,4 +50,11 @@ class AuthController(
         authService.revokeRefreshToken(request.refreshToken)
         return ResponseEntity.ok().build()
     }
+
+    @PostMapping("/google")
+    fun googleLogin(@RequestBody request: GoogleAuthRequest): ResponseEntity<AuthResponse> {
+        val response = authService.authenticateWithGoogle(request)
+            ?: return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
+        return ResponseEntity.ok(response)
+    }
 }

@@ -1,6 +1,8 @@
 package com.baibaali.usapp.authentication.dto
 
+import com.baibaali.usapp.authentication.model.GoogleAccount
 import com.baibaali.usapp.user.model.User
+import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken
 
 data class GoogleUser(
     val userId: String,
@@ -30,7 +32,25 @@ data class GoogleUser(
 fun GoogleUser.toUser(): User {
     return User(
         email = email,
-        password = "google",
-        name = name,
+        name = givenName,
+    )
+}
+
+fun GoogleUser.toGoogleAccount(): GoogleAccount {
+    return GoogleAccount(
+        id = 0L,
+        email = email,
+    )
+}
+
+fun GoogleIdToken.Payload.toGoogleUser(): GoogleUser {
+    return GoogleUser(
+        subject,
+        email,
+        emailVerified,
+        get("name") as String,
+        get("picture") as String,
+        get("family_name") as String,
+        get("given_name") as String
     )
 }

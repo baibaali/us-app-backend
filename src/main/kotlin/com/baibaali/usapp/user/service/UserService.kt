@@ -8,20 +8,11 @@ import org.springframework.stereotype.Service
 @Service
 class UserService(
     private val userRepository: UserRepository,
-    private val passwordEncoder: PasswordEncoder
 ) {
 
     fun save(user: User): User? {
-        val found = findByEmail(user.email)
-
-        println("Found user is: $found")
-
-        return if (found == null) {
-            val withEncodedPassword = user.copy(password = passwordEncoder.encode(user.password))
-            userRepository.save(withEncodedPassword)
-            withEncodedPassword
-        } else
-            null
+        if (existsByEmail(user.email)) return null
+        return userRepository.save(user)
     }
 
     fun findAll(): List<User> = userRepository.findAll()
@@ -30,4 +21,5 @@ class UserService(
 
     fun findByEmail(email: String): User? = userRepository.findByEmail(email)
 
+    fun existsByEmail(email: String): Boolean = userRepository.existsByEmail(email)
 }

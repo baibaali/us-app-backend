@@ -1,5 +1,6 @@
 package com.baibaali.usapp.authentication.service
 
+import com.baibaali.usapp.authentication.dto.AuthResponse
 import io.jsonwebtoken.Claims
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.security.Keys
@@ -15,6 +16,22 @@ class JwtService(
     private val secretKey = Keys.hmacShaKeyFor(
         jwtProperties.key.toByteArray()
     )
+
+    fun generateAuthResponse(user: UserDetails): AuthResponse {
+        val accessToken = generateAccessToken(user)
+        val refreshToken = generateRefreshToken(user)
+        return AuthResponse(accessToken, refreshToken)
+    }
+
+    fun generateAccessToken(userDetails: UserDetails): String {
+        val expiration = Date(System.currentTimeMillis() + jwtProperties.accessTokenExpiration)
+        return generate(userDetails, expiration, mapOf("type" to "access"))
+    }
+
+    fun generateRefreshToken(userDetails: UserDetails): String {
+        val expiration = Date(System.currentTimeMillis() + jwtProperties.refreshTokenExpiration)
+        return generate(userDetails, expiration, mapOf("type" to "refresh"))
+    }
 
     fun generate(userDetails: UserDetails, expiration: Date, claims: Map<String, Any> = emptyMap()): String {
         return Jwts.builder()

@@ -1,9 +1,9 @@
 package com.baibaali.usapp.authentication.controller
 
 import com.baibaali.usapp.authentication.dto.*
+import com.baibaali.usapp.authentication.excpetion.AccountAlreadyExistsException
 import com.baibaali.usapp.authentication.service.AuthenticationService
-import com.baibaali.usapp.user.model.toUserDetails
-import com.baibaali.usapp.user.service.UserService
+import com.baibaali.usapp.authentication.service.DefaultAccountService
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.security.core.AuthenticationException
@@ -14,18 +14,20 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/api/auth")
-class AuthController(
-    private val userService: UserService,
+class DefaultAuthController(
+    private val defaultAccountService: DefaultAccountService,
     private val authService: AuthenticationService
 ) {
 
     @PostMapping("/register")
-    fun register(@RequestBody request: UserRegistrationRequest): ResponseEntity<AuthResponse> {
-        val user = userService.save(request.toUser()) ?:
-            return ResponseEntity.status(HttpStatus.CONFLICT).build()
-
-        val response = authService.generateAuthResponse(user.toUserDetails())
-        return ResponseEntity.status(HttpStatus.CREATED).body(response)
+    fun register(@RequestBody request: UserRegistrationRequest): ResponseEntity<Unit> {
+        return try {
+            defaultAccountService.save(request) ?:
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build()
+            ResponseEntity.status(HttpStatus.CREATED).build()
+        } catch (e: AccountAlreadyExistsException) {
+            ResponseEntity.status(HttpStatus.CONFLICT).build()
+        }
     }
 
     @PostMapping("/login")
@@ -49,12 +51,5 @@ class AuthController(
     fun logout(@RequestBody request: LogoutRequest): ResponseEntity<Unit> {
         authService.revokeRefreshToken(request.refreshToken)
         return ResponseEntity.ok().build()
-    }
-
-    @PostMapping("/google")
-    fun googleLogin(@RequestBody request: GoogleAuthRequest): ResponseEntity<AuthResponse> {
-        val response = authService.authenticateWithGoogle(request)
-            ?: return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build()
-        return ResponseEntity.ok(response)
     }
 }

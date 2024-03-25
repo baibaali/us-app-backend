@@ -1,5 +1,7 @@
 package com.baibaali.usapp.authentication.config
 
+import com.baibaali.usapp.authentication.repository.DefaultAccountRepository
+import com.baibaali.usapp.authentication.repository.GoogleAccountRepository
 import com.baibaali.usapp.authentication.service.JwtProperties
 import com.baibaali.usapp.user.repository.UserRepository
 import com.baibaali.usapp.authentication.service.UserDetailsServiceImpl
@@ -18,8 +20,10 @@ import org.springframework.security.crypto.password.PasswordEncoder
 class Config {
 
     @Bean
-    fun userDetailsService(userRepository: UserRepository): UserDetailsServiceImpl {
-        return UserDetailsServiceImpl(userRepository)
+    fun userDetailsService(
+        defaultAccountRepository: DefaultAccountRepository,
+    ): UserDetailsServiceImpl {
+        return UserDetailsServiceImpl(defaultAccountRepository)
     }
 
     @Bean
@@ -28,9 +32,11 @@ class Config {
     }
 
     @Bean
-    fun authenticationProvider(userRepository: UserRepository): AuthenticationProvider {
+    fun authenticationProvider(
+        defaultAccountRepository: DefaultAccountRepository,
+    ): AuthenticationProvider {
         return DaoAuthenticationProvider().apply {
-            setUserDetailsService(userDetailsService(userRepository))
+            setUserDetailsService(userDetailsService(defaultAccountRepository))
             setPasswordEncoder(passwordEncoder())
         }
     }
